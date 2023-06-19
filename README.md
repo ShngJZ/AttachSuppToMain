@@ -1,13 +1,15 @@
-# IncludeSupplement
+# Attach Supp To Main Paper
 
-A simple method for including supplemental materials files on the arXiv.
+A Step-by-Step Tutorial for LaTeX with Overleaf.
 
-This repository includes information on how to include a supplemental materials file as a stand-alone PDF file when co-submitting a paper to the arXiv and a journal.  It uses the `pdfpages` and `pgffor` latex packages.  
+## Steps
 
-## Method
+Place before title of `main.tex`.
 
-Place the following in the header of your main `manuscript.tex` file
+    \documentclass{article}
+    \usepackage{...}
 
+    %%====================================%%
     \usepackage{pdfpages} % include pdfs
     \usepackage{pgffor} % for loops
     
@@ -17,41 +19,33 @@ Place the following in the header of your main `manuscript.tex` file
     \makeatother
     
     % the name of the supplement PDF file
-    \def\supplementfilename{supplement.pdf}
+    \def\supplementfilename{supp.pdf}
     
-    % Determine the number of pages 
-    % in the supplement file and store
+    % Determine the number of pages of Supp
     \pdfximage{\supplementfilename}
     \def\numbersupplementpages{\the\pdflastximagepages}
     
-    % Are we submitting to the arXiv? 
-    % Un-comment the appropriate line
     \newif\ifarXiv
     \arXivtrue 
-    % \arXivfalse
+    %%====================================%%
 
-and include at the end of the document
+    \title{...}
+    \begin{document}
 
-    ...
-    \bibliography{refs}
+Place at the end of the document
 
     \ifarXiv
         \foreach \x in {1,...,\numbersupplementpages}
         {
-            \clearpage
-            \includepdf[pages={\x,{}}]{\supplementfilename}
+            \includepdf[fitpaper=true, pages=\x]{\supplementfilename}
         }
     \fi
 
     \end{document}
 
-where `\numbersupplementpages` is the automatically determined number of pages in the PDF file.
-
 ## Usage 
-1. Generate `supplement.pdf` by running `pdflatex/bibtex` on `supplement.tex` to create a stand-alone PDF file
-2. Run `pdflatex/bibtex` on `manuscript.tex` to produce the combined `manuscript.pdf` file.
-3. Upload `manuscript.tex`, `manuscript.bbl` and `supplement.pdf` to the arXiv.
-
-## TODO
-- Replace `pgffor` package with plain TeX loop
-- Integrate instructions for using this with overleaf: https://www.overleaf.com/learn/how-to/Cross_referencing_with_the_xr_package_in_Overleaf
+1. Generate `supp.pdf` and Upload to Overleaf Project.
+2. Check `main.tex` compiles as expected.
+3. Click Submit -> Arxiv in Overleaf.
+4. Decompress the .tar file and remove `supp.tex`.
+5. Submit to Arxiv
